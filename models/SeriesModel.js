@@ -46,10 +46,13 @@ class Series {
         });
     }
 
-    static Delete(id) {
+    static Delete(id, callback) {
         GetAllDataFromFile(dataPath, (series) => {
             const newseries = series.filter((serie) => serie.id !== Number(id));
+
             SaveDataInFile(dataPath, newseries);
+
+            if (callback) callback();
         });
     }
 }

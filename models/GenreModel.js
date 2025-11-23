@@ -43,10 +43,12 @@ class Genres {
         });
     }
 
-    static Delete(id) {
+    static Delete(id, callback) {
         GetAllDataFromFile(dataPath, (genres) => {
             const newGenres = genres.filter((genre) => genre.id !== Number(id));
             SaveDataInFile(dataPath, newGenres);
+
+            if (callback) callback();
         });
     }
 }
