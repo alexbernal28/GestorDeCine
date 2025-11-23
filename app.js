@@ -2,6 +2,7 @@ import express from "express";
 import { engine } from "express-handlebars";
 import { projectRoot } from "./utils/paths.js";
 import path from "path";
+import genresRouter from "./routes/genres-router.js";
 
 const app = express();
 
@@ -16,6 +17,8 @@ app.set("views", "views");
 
 app.use(express.urlencoded());
 app.use(express.static(path.join(projectRoot, "public")));
+
+app.use("/genre", genresRouter);
 
 app.use((req, res) => {
     res.status(404).render("404", { title: "Error 404" });
