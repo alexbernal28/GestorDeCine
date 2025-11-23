@@ -55,6 +55,31 @@ class Series {
             if (callback) callback();
         });
     }
+
+    static SeriesFilter(name = null, genreId = null, callback) {
+        GetAllDataFromFile(dataPath, (series) => {
+            let filteredSeries = series;
+
+            if (name) {
+                const searchText = name.toLowerCase();
+                filteredSeries = filteredSeries.filter((serie) =>
+                    serie.name.toLowerCase().startsWith(searchText)
+                );
+            }
+
+            if (genreId) {
+                filteredSeries = filteredSeries.filter((serie) =>
+                    serie.genreId === Number(genreId)
+                );
+            }
+
+            if (filteredSeries.length > 0) {
+                callback(filteredSeries);
+            } else {
+                callback([]);
+            }
+        });
+    }
 }
 
 export default Series;
