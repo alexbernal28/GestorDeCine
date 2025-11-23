@@ -4,7 +4,8 @@ import { projectRoot } from "./utils/paths.js";
 import path from "path";
 import genresRouter from "./routes/genres-router.js";
 import seriesRouter from "./routes/series-router.js";
-import { getGenreName, eq } from "./helpers/hbs/helper.js";
+import homeRouter from "./routes/home-router.js"
+import { getGenreName, eq, replace } from "./helpers/hbs/helper.js";
 
 const app = express();
 
@@ -14,7 +15,8 @@ app.engine("hbs", engine({
     extname: "hbs",
     helpers: {
         eq,
-        getGenreName
+        getGenreName,
+        replace
     }
 }));
 
@@ -27,6 +29,9 @@ app.use(express.static(path.join(projectRoot, "public")));
 app.use("/genre", genresRouter);
 
 app.use("/series", seriesRouter);
+
+app.use('/', homeRouter);
+app.use('/home', homeRouter);
 
 app.use((req, res) => {
     res.status(404).render("404", { title: "Error 404" });
