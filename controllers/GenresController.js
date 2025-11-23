@@ -60,7 +60,7 @@ export function PostEdit(req, res, next) {
 export function PostDelete(req, res, next) {
     const id = req.body.GenreId;
 
-    GenresModel.Delete(id);
-
-    res.redirect("/genre/index");
+    GenresModel.Delete(id, () => {
+        res.redirect("/genre/index");
+    });
 }
