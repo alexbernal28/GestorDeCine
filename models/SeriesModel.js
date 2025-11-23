@@ -1,0 +1,57 @@
+import path from "path";
+import { projectRoot } from "../utils/paths.js";
+import { GetAllDataFromFile, SaveDataInFile } from "../utils/FileHandler.js";
+
+const dataPath = path.join(projectRoot, "data", "series.json");
+
+class Series {
+    constructor(id, name, frontPage, youtubeLink, genreId) {
+        this.id = id;
+        this.name = name;
+        this.frontPage = frontPage;
+        this.youtubeLink = youtubeLink;
+        this.genreId = genreId;
+    }
+
+    static GetById(id, callback) {
+        GetAllDataFromFile(dataPath, (series) => {
+            const serie = series.find((serie) => serie.id === Number(id));
+            if (serie) {
+                callback(serie);
+            }
+            else {
+                callback(null)
+            }
+        });
+    }
+
+    static GetAll(callback) {
+        GetAllDataFromFile(dataPath, callback);
+    }
+
+    Save() {
+        GetAllDataFromFile(dataPath, (series) => {
+            if (this.id !== 0) {
+                const editserie = series.findIndex(
+                    (serie) => serie.id === Number(this.id)
+                );
+                series[editserie] = this;
+                SaveDataInFile(dataPath, series);
+            }
+            else {
+                this.id = series.length + 1;
+                series.push(this);
+                SaveDataInFile(dataPath, series);
+            }
+        });
+    }
+
+    static Delete(id) {
+        GetAllDataFromFile(dataPath, (series) => {
+            const newseries = series.filter((serie) => serie.id !== Number(id));
+            SaveDataInFile(dataPath, newseries);
+        });
+    }
+}
+
+export default Series;
